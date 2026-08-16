@@ -333,26 +333,31 @@ const AddApplication = () => {
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
-              <button 
-                type="button" 
-                className="btn btn-secondary" 
-                onClick={prevStep}
-                style={{ visibility: currentStep === 0 ? 'hidden' : 'visible' }}
-              >
-                <ArrowLeft size={18} /> Previous
-              </button>
-              
-              {currentStep < STEPS.length - 1 ? (
-                <button type="button" className="btn btn-primary" onClick={nextStep}>
-                  Next <ArrowRight size={18} />
-                </button>
-              ) : (
-                <button type="submit" className="btn btn-primary" disabled={submitting}>
-                  {submitting ? 'Saving...' : (editId ? 'Update Application' : 'Save Application')} <Check size={18} />
-                </button>
-              )}
-            </div>
+            {(() => {
+              const isLastStep = currentStep === STEPS.length - 1;
+              return (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={prevStep}
+                    style={{ visibility: currentStep === 0 ? 'hidden' : 'visible' }}
+                  >
+                    <ArrowLeft size={18} /> Previous
+                  </button>
+
+                  {!isLastStep ? (
+                    <button key="next" type="button" className="btn btn-primary" onClick={nextStep}>
+                      Next <ArrowRight size={18} />
+                    </button>
+                  ) : (
+                    <button key="submit" type="submit" className="btn btn-primary" disabled={submitting}>
+                      {submitting ? 'Saving...' : (editId ? 'Update Application' : 'Save Application')} <Check size={18} />
+                    </button>
+                  )}
+                </div>
+              );
+            })()}
           </form>
         </div>
       </div>
