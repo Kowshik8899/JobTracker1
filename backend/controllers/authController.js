@@ -191,7 +191,7 @@ const forgotPassword = async (req, res, next) => {
 
     await user.save();
 
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL || 'https://new-job-tracker1.vercel.app'}/reset-password/${resetToken}`;
     
     // For development, log the URL
     console.log(`Password reset URL (Development only): \n${resetUrl}`);

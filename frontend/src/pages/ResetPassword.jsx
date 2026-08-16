@@ -33,7 +33,7 @@ const ResetPassword = () => {
 
     setLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       await axios.put(`${backendUrl}/api/auth/reset-password/${token}`, {
         password: formData.password
       });

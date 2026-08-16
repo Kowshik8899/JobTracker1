@@ -73,7 +73,7 @@ const Profile = () => {
 
   const handlePartialUpdate = async (updatePayload, section) => {
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       const { data } = await axios.put(`${backendUrl}/api/auth/profile`, updatePayload, config);
@@ -98,7 +98,7 @@ const Profile = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       const { data } = await axios.put(`${backendUrl}/api/auth/profile`, formData, config);
@@ -124,7 +124,7 @@ const Profile = () => {
       const uploadData = new FormData();
       uploadData.append('resume', file);
       
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { 
         headers: { 
           Authorization: `Bearer ${user.token}`,
@@ -148,7 +148,7 @@ const Profile = () => {
 
   const handleResumeDelete = async () => {
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       await axios.delete(`${backendUrl}/api/auth/resume`, config);
@@ -163,7 +163,7 @@ const Profile = () => {
 
   const handleResumeDownload = () => {
     if (user?.resumeInformation?.fileUrl) {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       window.open(`${backendUrl}${user.resumeInformation.fileUrl}`, '_blank');
     }
   };

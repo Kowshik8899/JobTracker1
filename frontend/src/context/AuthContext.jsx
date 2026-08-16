@@ -18,8 +18,8 @@ export const AuthProvider = ({ children }) => {
               Authorization: `Bearer ${token}`
             }
           };
-          // Assuming backend is at http://localhost:5000 or relative path if proxied
-          const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+          // Assuming backend is at https://jobtracker-backend-4mt6.onrender.com or relative path if proxied
+          const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
           const { data } = await axios.get(`${backendUrl}/api/auth/profile`, config);
           
           setUser({ ...data, token });
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
     const { data } = await axios.post(`${backendUrl}/api/auth/login`, { email, password });
     localStorage.setItem('jobtracker_token', data.token);
     setUser(data);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
     const { data } = await axios.post(`${backendUrl}/api/auth/register`, userData);
     localStorage.setItem('jobtracker_token', data.token);
     setUser(data);

@@ -12,7 +12,7 @@ export const NotificationProvider = ({ children }) => {
   const fetchNotifications = async () => {
     if (!user) return;
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
@@ -35,7 +35,7 @@ export const NotificationProvider = ({ children }) => {
 
   const markAsRead = async (id) => {
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
@@ -52,7 +52,7 @@ export const NotificationProvider = ({ children }) => {
 
   const markAllAsRead = async () => {
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };

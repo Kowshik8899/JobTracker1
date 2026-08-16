@@ -63,7 +63,7 @@ const Settings = () => {
 
     setLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       await axios.put(`${backendUrl}/api/auth/password`, {
@@ -84,7 +84,7 @@ const Settings = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       await axios.put(`${backendUrl}/api/auth/profile`, {
@@ -104,7 +104,7 @@ const Settings = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       await axios.delete(`${backendUrl}/api/auth/account`, config);

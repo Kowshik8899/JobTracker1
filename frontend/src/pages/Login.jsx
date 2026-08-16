@@ -52,7 +52,7 @@ const Login = () => {
     
     setForgotLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const { data } = await axios.post(`${backendUrl}/api/auth/forgot-password`, {
         email
       });

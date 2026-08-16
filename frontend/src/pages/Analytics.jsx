@@ -54,7 +54,7 @@ const Analytics = () => {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const response = await axios.get(`${backendUrl}/api/analytics`, config);
       setData(response.data);
@@ -119,7 +119,7 @@ const Analytics = () => {
   const saveGoal = async () => {
     setSavingGoal(true);
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       await axios.put(`${backendUrl}/api/auth/profile`, { weeklyGoal: Number(goalInput) }, config);
       

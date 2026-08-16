@@ -45,7 +45,7 @@ const AddApplication = () => {
     if (editId) {
       const fetchApplication = async () => {
         try {
-          const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+          const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
           const { data } = await axios.get(`${backendUrl}/api/applications/${editId}`, config);
           
@@ -115,7 +115,7 @@ const AddApplication = () => {
     setSubmitting(true);
     
     try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       
       if (editId) {
