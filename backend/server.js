@@ -12,7 +12,16 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: process.env.FRONTEND_URL || 'https://new-job-tracker1.vercel.app', credentials: true }));
+const allowedOrigins = [
+  (process.env.FRONTEND_URL || '').replace(/\/$/, ''),
+  'https://new-job-tracker1.vercel.app',
+  'http://localhost:5173'
+].filter(Boolean);
+
+app.use(cors({ 
+  origin: allowedOrigins,
+  credentials: true 
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
