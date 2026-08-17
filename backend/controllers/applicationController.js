@@ -1,6 +1,15 @@
 const Application = require('../models/Application');
 const { createNotification } = require('./notificationController');
 
+const STATUS_OPTIONS = ['Applied', 'Screening', 'Interview', 'Technical Interview', 'Final Interview', 'Offer', 'Accepted', 'Rejected', 'Withdrawn'];
+const PRIORITY_OPTIONS = ['Low', 'Medium', 'High'];
+
+const normalizeEnum = (value, validOptions, fallback) => {
+  if (!value) return fallback;
+  const match = validOptions.find(opt => opt.toLowerCase() === String(value).toLowerCase());
+  return match || fallback;
+};
+
 // @desc    Get user applications with filtering, sorting, and pagination
 // @route   GET /api/applications
 // @access  Private
@@ -89,6 +98,13 @@ const createApplication = async (req, res, next) => {
       user: req.user._id
     };
 
+    if (applicationData.status) {
+      applicationData.status = normalizeEnum(applicationData.status, STATUS_OPTIONS, 'Applied');
+    }
+    if (applicationData.priority) {
+      applicationData.priority = normalizeEnum(applicationData.priority, PRIORITY_OPTIONS, 'Medium');
+    }
+
     const application = await Application.create(applicationData);
     
     createNotification(req.user._id, 'New Application Added', `${application.companyName} — ${application.jobRole}`, 'application_update', application._id);
@@ -108,9 +124,18 @@ const updateApplication = async (req, res, next) => {
 
     if (application && application.user.toString() === req.user._id.toString()) {
       const oldStatus = application.status;
+      
+      const updateData = { ...req.body };
+      if (updateData.status) {
+        updateData.status = normalizeEnum(updateData.status, STATUS_OPTIONS, 'Applied');
+      }
+      if (updateData.priority) {
+        updateData.priority = normalizeEnum(updateData.priority, PRIORITY_OPTIONS, 'Medium');
+      }
+
       const updatedApplication = await Application.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        updateData,
         { new: true, runValidators: true }
       );
       

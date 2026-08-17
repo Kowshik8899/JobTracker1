@@ -189,7 +189,7 @@ const Dashboard = () => {
                   {recentApplications.map((app) => (
                     <tr key={app._id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                       <td style={{ padding: '1rem 1.5rem' }}>
-                        <div style={{ fontWeight: '500' }}>{app.companyName}</div>
+                        <div style={{ fontWeight: '500' }}>{app.companyName || 'Untitled Application'}</div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{app.location || '-'}</div>
                       </td>
                       <td style={{ padding: '1rem 1.5rem', color: 'var(--color-text-main)' }}>{app.jobRole}</td>

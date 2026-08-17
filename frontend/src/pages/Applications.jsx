@@ -255,7 +255,7 @@ const Applications = () => {
                   {applications.map((app) => (
                     <tr key={app._id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                       <td style={{ padding: '1rem 1.5rem' }}>
-                        <div style={{ fontWeight: '500' }}>{app.companyName}</div>
+                        <div style={{ fontWeight: '500' }}>{app.companyName || 'Untitled Application'}</div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{app.location || '-'}</div>
                       </td>
                       <td style={{ padding: '1rem 1.5rem', color: 'var(--color-text-main)' }}>{app.jobRole}</td>
@@ -294,7 +294,7 @@ const Applications = () => {
                   <div className="card-header" style={{ alignItems: 'flex-start' }}>
                     <div>
                       <h3 style={{ fontSize: '1.125rem', margin: '0 0 0.25rem 0' }}>{app.jobRole}</h3>
-                      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', margin: 0 }}>{app.companyName}</p>
+                      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', margin: 0 }}>{app.companyName || 'Untitled Application'}</p>
                     </div>
                     <span className={`badge ${getStatusBadgeClass(app.status)}`}>
                       {app.status}

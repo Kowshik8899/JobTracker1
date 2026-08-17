@@ -4,11 +4,8 @@ import {
   User, 
   Mail, 
   Briefcase, 
-  Upload, 
   Check, 
-  Download,
   Trash2,
-  FileText,
   Phone,
   MapPin,
   Link,
@@ -25,7 +22,6 @@ import toast from 'react-hot-toast';
 const Profile = () => {
   const { user, updateUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -115,56 +111,6 @@ const Profile = () => {
       toast.error(message);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleResumeUpload = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const uploadData = new FormData();
-      uploadData.append('resume', file);
-      
-      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
-      const config = { 
-        headers: { 
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'multipart/form-data'
-        } 
-      };
-      
-      const promise = axios.post(`${backendUrl}/api/auth/resume`, uploadData, config)
-        .then((res) => {
-          const updatedUser = { ...user, resumeInformation: res.data };
-          updateUser(updatedUser);
-        });
-
-      toast.promise(promise, {
-        loading: 'Uploading resume...',
-        success: 'Resume uploaded successfully!',
-        error: 'Failed to upload resume',
-      });
-    }
-  };
-
-  const handleResumeDelete = async () => {
-    try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      
-      await axios.delete(`${backendUrl}/api/auth/resume`, config);
-      
-      const updatedUser = { ...user, resumeInformation: { fileName: '', fileUrl: '', uploadedAt: null } };
-      updateUser(updatedUser);
-      toast.success('Resume deleted successfully');
-    } catch (error) {
-      toast.error('Failed to delete resume');
-    }
-  };
-
-  const handleResumeDownload = () => {
-    if (user?.resumeInformation?.fileUrl) {
-      const backendUrl = import.meta.env.VITE_API_URL || 'https://jobtracker-backend-4mt6.onrender.com';
-      window.open(`${backendUrl}${user.resumeInformation.fileUrl}`, '_blank');
     }
   };
 
@@ -265,64 +211,6 @@ const Profile = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <ExternalLink size={18} color="var(--color-text-muted)" />
                     <span>{user?.contactInformation?.github || 'Not provided'}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Resume Upload */}
-          <div className="card">
-            <div className="card-header">
-              <h3 style={{ fontSize: '1.125rem', margin: 0 }}>Resume</h3>
-            </div>
-            <div className="card-body">
-              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-                Upload your current resume to have it handy when applying for jobs.
-              </p>
-              
-              <div style={{ 
-                border: '2px dashed var(--color-border)', 
-                borderRadius: 'var(--radius-md)', 
-                padding: '2rem', 
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'border-color var(--transition-fast)'
-              }} onClick={() => fileInputRef.current.click()}>
-                <Upload size={32} color="var(--color-primary)" style={{ marginBottom: '1rem' }} />
-                <p style={{ fontWeight: '500', marginBottom: '0.5rem' }}>Click to upload or drag and drop</p>
-                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>PDF, DOCX up to 5MB</p>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  style={{ display: 'none' }} 
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleResumeUpload}
-                />
-              </div>
-
-              {user?.resumeInformation?.fileName && (
-                <div style={{ 
-                  marginTop: '1.5rem', 
-                  padding: '1rem', 
-                  backgroundColor: 'var(--color-background)', 
-                  borderRadius: 'var(--radius-md)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <FileText size={24} color="var(--color-primary)" />
-                    <div>
-                      <div style={{ fontWeight: '500', fontSize: '0.875rem' }}>{user.resumeInformation.fileName}</div>
-                      <div style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>
-                        {user.resumeInformation.uploadedAt ? new Date(user.resumeInformation.uploadedAt).toLocaleDateString() : 'Uploaded'}
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button className="btn-icon" title="Download" onClick={handleResumeDownload}><Download size={16} /></button>
-                    <button className="btn-icon" title="Delete" onClick={handleResumeDelete} style={{ color: 'var(--color-danger)' }}><Trash2 size={16} /></button>
                   </div>
                 </div>
               )}

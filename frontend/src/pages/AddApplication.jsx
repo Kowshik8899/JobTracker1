@@ -9,6 +9,15 @@ import toast from 'react-hot-toast';
 
 const STEPS = ['Basic Info', 'Details', 'Contact & Notes'];
 
+const STATUS_OPTIONS = ['Applied', 'Screening', 'Interview', 'Technical Interview', 'Final Interview', 'Offer', 'Accepted', 'Rejected', 'Withdrawn'];
+const PRIORITY_OPTIONS = ['Low', 'Medium', 'High'];
+
+const normalizeEnum = (value, validOptions, fallback) => {
+  if (!value) return fallback;
+  const match = validOptions.find(opt => opt.toLowerCase() === String(value).toLowerCase());
+  return match || fallback;
+};
+
 const AddApplication = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -54,7 +63,9 @@ const AddApplication = () => {
             ...data,
             applicationDate: data.applicationDate ? new Date(data.applicationDate).toISOString().split('T')[0] : '',
             deadline: data.deadline ? new Date(data.deadline).toISOString().split('T')[0] : '',
-            interviewDate: data.interviewDate ? new Date(data.interviewDate).toISOString().split('T')[0] : ''
+            interviewDate: data.interviewDate ? new Date(data.interviewDate).toISOString().split('T')[0] : '',
+            status: normalizeEnum(data.status, STATUS_OPTIONS, 'Applied'),
+            priority: normalizeEnum(data.priority, PRIORITY_OPTIONS, 'Medium')
           };
           
           setFormData(formattedData);
