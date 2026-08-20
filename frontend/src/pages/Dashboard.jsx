@@ -51,6 +51,7 @@ const StatCard = ({ title, value, icon, color, trend }) => (
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const [stats, setStats] = useState(null);
+  const [allApplications, setAllApplications] = useState([]);
   const [recentApplications, setRecentApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +69,7 @@ const Dashboard = () => {
         ]);
 
         setStats(analyticsRes.data);
+        setAllApplications(appsRes.data);
         setRecentApplications(appsRes.data.slice(0, 5)); // Get top 5 newest
       } catch (error) {
         console.error("Failed to load dashboard data:", error);
@@ -82,6 +84,23 @@ const Dashboard = () => {
   if (loading) {
     return <PageLoader />;
   }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcomingInterviews = allApplications
+    .filter(app =>
+      ['Interview', 'Technical Interview', 'Final Interview'].includes(app.status) &&
+      app.interviewDate
+    )
+    .map(app => {
+      const interviewDate = new Date(app.interviewDate);
+      const diffTime = interviewDate.setHours(0, 0, 0, 0) - today.getTime();
+      const daysLeft = Math.round(diffTime / (1000 * 60 * 60 * 24));
+      return { ...app, daysLeft };
+    })
+    .filter(app => app.daysLeft >= 0) // only future or today, not past interviews
+    .sort((a, b) => a.daysLeft - b.daysLeft); // soonest first
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -165,6 +184,47 @@ const Dashboard = () => {
         gap: '1.5rem',
         alignItems: 'start'
       }}>
+        {/* Upcoming Interviews */}
+        <div className="card" style={{ gridColumn: '1 / -1' }}>
+          <div className="card-header">
+            <h3 style={{ fontSize: '1.125rem', margin: 0 }}>Upcoming Interviews</h3>
+          </div>
+
+          {upcomingInterviews.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {upcomingInterviews.map(app => (
+                <div
+                  key={app._id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem 1.5rem',
+                    borderBottom: '1px solid var(--color-border)'
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: '500' }}>{app.companyName}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{app.jobRole}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontWeight: '600', color: 'var(--color-warning)' }}>
+                      {app.daysLeft === 0 ? 'Today' : app.daysLeft === 1 ? 'Tomorrow' : `${app.daysLeft} days left`}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                      {new Date(app.interviewDate).toLocaleDateString('en-GB')}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{ padding: '1.5rem', color: 'var(--color-text-muted)', margin: 0 }}>
+              No upcoming interviews scheduled.
+            </p>
+          )}
+        </div>
+
         {/* Recent Applications */}
         <div className="card" style={{ gridColumn: '1 / -1' }}>
           <div className="card-header">
