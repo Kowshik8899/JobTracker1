@@ -48,7 +48,7 @@ const Analytics = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showGoalModal, setShowGoalModal] = useState(false);
-  const [goalInput, setGoalInput] = useState(5);
+  const [goalInput, setGoalInput] = useState(10);
   const [savingGoal, setSavingGoal] = useState(false);
 
   const fetchAnalytics = async () => {
@@ -112,7 +112,7 @@ const Analytics = () => {
   };
 
   const handleEditGoals = () => {
-    setGoalInput(data.weeklyGoal || 5);
+    setGoalInput(data.weeklyGoal || 10);
     setShowGoalModal(true);
   };
 
@@ -221,6 +221,10 @@ const Analytics = () => {
     }
   };
 
+  const applicationsThisWeek = data.applicationsThisWeek ?? 0;
+  const weeklyGoal = data.weeklyGoal || 10;
+  const progressPercentage = weeklyGoal > 0 ? Math.min((applicationsThisWeek / weeklyGoal) * 100, 100) : 0;
+
   return (
     <DashboardLayout title="Analytics">
       {/* Action Bar */}
@@ -316,17 +320,24 @@ const Analytics = () => {
           <div className="card-body">
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <span style={{ fontWeight: '500' }}>Applications this week</span>
-              <span style={{ fontWeight: 'bold' }}>2 / {data.weeklyGoal}</span>
+              <span style={{ fontWeight: 'bold' }}>{applicationsThisWeek} / {weeklyGoal}</span>
             </div>
             <div style={{ height: '8px', backgroundColor: 'var(--color-border)', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ 
                 height: '100%', 
-                width: `${Math.min((2 / data.weeklyGoal) * 100, 100)}%`, 
-                backgroundColor: 'var(--color-primary)' 
+                width: `${progressPercentage}%`, 
+                backgroundColor: 'var(--color-primary)',
+                transition: 'width 0.3s ease'
               }}></div>
             </div>
             <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginTop: '1rem' }}>
-              You're on track! Keep applying to reach your weekly goal.
+              {applicationsThisWeek === 0 
+                ? "You haven't applied for any jobs this week. Start applying to reach your goal." 
+                : applicationsThisWeek >= weeklyGoal 
+                  ? "Congratulations! You've reached your weekly goal." 
+                  : (applicationsThisWeek / weeklyGoal) >= 0.5
+                    ? "You're making progress. Keep going!"
+                    : "Good start! Keep applying to reach your weekly goal."}
             </p>
           </div>
         </div>

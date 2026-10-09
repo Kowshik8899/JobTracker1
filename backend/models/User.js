@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   institution: { type: String, default: '' },
   academicYear: { type: String, default: '' },
   cgpa: { type: String, default: '' },
-  weeklyGoal: { type: Number, default: 5 },
+  weeklyGoal: { type: Number, default: 10 },
   summary: { type: String, default: '' },
   skills: {
     languages: [{ type: String }],

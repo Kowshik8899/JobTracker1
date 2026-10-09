@@ -69,8 +69,26 @@ const getAnalytics = async (req, res, next) => {
       }
     });
 
+    // Calculate applications this week
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    const dayOfWeek = now.getDay(); // 0 is Sunday, 1 is Monday, etc.
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    startOfWeek.setDate(now.getDate() + diffToMonday);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 7); // Following Monday
+    endOfWeek.setHours(0, 0, 0, 0);
+
+    const applicationsThisWeek = applications.filter(app => {
+      const appDate = new Date(app.applicationDate || app.createdAt);
+      return appDate >= startOfWeek && appDate < endOfWeek;
+    }).length;
+
     res.json({
       totalApplications,
+      applicationsThisWeek,
       interviews,
       offers,
       pending,
@@ -82,7 +100,7 @@ const getAnalytics = async (req, res, next) => {
       },
       statusDistribution: statusCounts,
       timeline: timelineData,
-      weeklyGoal: user.weeklyGoal || 5
+      weeklyGoal: user.weeklyGoal || 10
     });
   } catch (error) {
     next(error);
